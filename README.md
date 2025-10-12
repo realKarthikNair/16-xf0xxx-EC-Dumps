@@ -21,9 +21,9 @@ Files under these folders are raw EC maps (width=1, i/o ports 0x66/0x62):
 - `omenauto/`: Omen Hub running with auto fan mode
 - `max/`: Omen Hub "Max" template
 - `lowestmanual/`: lowest speed with manual control
-- `rampedupmanual/`: higher speed with manual control
+- `rampedupmanual/`: highest speed with manual control
 
-Key observations (sample1.rw across groups):
+Key observations:
 
 [ABLE TO REPRODUCE]
 - CPU target registers 0x11 and 0x14 track exactly: 0x19 at low manual, 0x3C at ramp/manual/max, 0x14 in before/auto.
