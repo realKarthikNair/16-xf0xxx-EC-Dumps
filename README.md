@@ -1,3 +1,31 @@
+https://github.com/torvalds/linux/commit/55b964dfbadc3729d3606849471eab11705f578a
+
+The kernel now officially supports manual fan control for this laptop. Stuff in this repo is no longer the optimal way to control fans on this laptop manually. You can rather use the below commands as long as you're on a kernel version that has this patch. 
+
+```bash
+    echo 0 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1_enable
+
+    echo 1 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1_enable
+
+
+    echo 200 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1
+```
+
+with pwm1_enable, 
+
+0 => max fan speed  
+1 => manual control   
+2 => let BIOS do the job (inefficient with this laptop on any OS) 
+
+with pwm1
+
+0-255 where 255 denotes 6200 RPM (max speed) 
+
+
+Original repo README below
+---
+
+
 ⚠️ Whatever you do, TRY THINGS AT YOUR OWN RISK - I AM NOT RESPONSIBLE IF YOU HAVE A BRICKED MOTHERBOARD. THAT INCLUDES THE VALUES I HAVE CONFIRMED WORKING ON MY DEVICE - EVEN THEM YOU USE AT YOUR OWN RISK. ⚠️
 
 Also, READ THE WHOLE THING FIRST.
