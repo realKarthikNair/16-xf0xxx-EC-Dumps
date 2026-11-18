@@ -1,26 +1,30 @@
-https://github.com/torvalds/linux/commit/55b964dfbadc3729d3606849471eab11705f578a
+## Manual fan control is now in the kernel
 
-The kernel now officially supports manual fan control for this laptop. Stuff in this repo is no longer the optimal way to control fans on this laptop manually. You can rather use the below commands as long as you're on a kernel version that has this patch. 
+> [!IMPORTANT]
+> **Kernel 7.3 changed this.** `pwm1` now controls only the CPU fan and `pwm2` controls the GPU fan. Before 7.3, `pwm1` set both fans and there was no `pwm2`. If you only write `pwm1` on 7.3+, the GPU fan stays at whatever speed it had when you switched to manual mode, often 0 RPM. The commands below set both fans and work on old and new kernels.
+
+The kernel officially supports manual fan control for this laptop since [this patch](https://github.com/torvalds/linux/commit/55b964dfbadc3729d3606849471eab11705f578a). Stuff in this repo is no longer the optimal way to control fans on this laptop manually. Use the commands below instead.
 
 ```bash
-    echo 0 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1_enable
+# max fan speed (both fans)
+echo 0 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1_enable
 
-    echo 1 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1_enable
-
-
-    echo 200 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1
+# manual control: switch to manual mode first, then set both fans
+echo 1 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm1_enable
+echo 200 | sudo tee /sys/devices/platform/hp-wmi/hwmon/hwmon*/pwm[12]
 ```
 
-with pwm1_enable, 
+`pwm[12]` writes to `pwm1`, and to `pwm2` if it exists, so the same command works on any kernel.
 
-0 => max fan speed  
-1 => manual control   
-2 => let BIOS do the job (inefficient with this laptop on any OS) 
+`pwm1_enable` sets the mode for both fans (there is no `pwm2_enable`):
 
-with pwm1
+- `0` => max fan speed
+- `1` => manual control
+- `2` => let BIOS do the job (inefficient with this laptop on any OS)
 
-0-255 where 255 denotes 6200 RPM (max speed) 
+`pwm1` (CPU fan) and `pwm2` (GPU fan, kernel 7.3+):
 
+- `0-255`, where 255 denotes max speed (~6200 RPM)
 
 Original repo README below
 ---
